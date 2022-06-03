@@ -1,11 +1,12 @@
 .app {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  height: 100%;
+  overflow: hidden;
+  height: 100vh;
   &-body {
     display: flex;
     .content {
-      width: 100%;
+      flex: 1;
       padding: 30px;
     }
   }

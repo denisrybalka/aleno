@@ -1,11 +1,16 @@
-import React, { useContext } from "react";
-import { ThemeContext } from "../context";
+import React, { useContext, useState } from "react";
+import { NotificationContext, SidebarContext, ThemeContext } from "../context";
+import { useClickOutside } from "../hooks/useClickOutside";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
+import CreateLabel from "../pages/SearchEngine/CreateLabel";
 
 import { ReactComponent as LogoImage } from "../assets/icons/logo.svg";
 
 import { ReactComponent as CopyIcon } from "../assets/icons/copy.svg";
 import { ReactComponent as ReloadIcon } from "../assets/icons/reload.svg";
 import { ReactComponent as PencilIcon } from "../assets/icons/pencil.svg";
+import { ReactComponent as CloseIcon } from "../assets/icons/notification-close.svg";
 
 import { ReactComponent as SidebarIcon1 } from "../assets/icons/sidebar/sidebar1.svg";
 import { ReactComponent as SidebarIcon2 } from "../assets/icons/sidebar/sidebar2.svg";
@@ -24,6 +29,8 @@ import { ReactComponent as GreenIcon } from "../assets/icons/sidebar/socials/gre
 import { ReactComponent as MailIcon } from "../assets/icons/sidebar/socials/mail.svg";
 
 import "../scss/components/sidebar.scss";
+
+const token = "0x0d49cf1e1c984d7190a8fcf4429ddbb5758b40fd";
 
 const RenderUserPanel = () => {
   return (
@@ -77,12 +84,52 @@ const RenderUserPanel = () => {
 
 const Sidebar = () => {
   const { theme, setTheme } = useContext(ThemeContext);
+  const { notification, setNotification } = useContext(NotificationContext);
+  const { sidebarActive, setSidebarActive } = useContext(SidebarContext);
+
+  const formattedToken = token.slice(0, 6).concat("...").concat(token.slice(-4));
+
+  const [labelInput, setLabelInput] = useState('');
+  const [label, setLabel] = useState("Ethereum");
+  const [createLabelActive, setCreateLabelActive] = useState(false);
+  const modalRef = useClickOutside(() => {
+    setCreateLabelActive(false);
+  })
+
+  const handleActionClick = (action) => {
+    if (notification.length === 0) {
+      setNotification(action);
+
+      const timeout = setTimeout(() => {
+        setNotification("");
+        return () => clearTimeout(timeout);
+      }, 2500)
+    }
+  }
+
+  const handleAddLabelClick = () => {
+    if (labelInput.length > 0) {
+      setLabel(labelInput);
+      setCreateLabelActive(false);
+      setLabelInput("");
+    }
+  }
+
+  const handleCancelClick = () => {
+    setCreateLabelActive(false);
+    setLabelInput("");
+  }
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${sidebarActive ? "active" : ""}`}>
       <div className="sidebar-logo">
-        <LogoImage />
-        Aleno
+        <div className="logo">
+          <LogoImage />
+          Aleno
+        </div>
+        <div className="close" onClick={() => setSidebarActive(false)}>
+          <CloseIcon />
+        </div>
       </div>
       <div className="sidebar-userbar">
         <div className="sidebar-userbar-user">
@@ -92,30 +139,43 @@ const Sidebar = () => {
             alt="user-image"
           />
           <div className="sidebar-userbar-user-info">
-            <div className="token">0x0d49…40fd</div>
-            <div className="label">Ethereum</div>
+            <div className="token">{formattedToken}</div>
+            <div className="label">{label}</div>
           </div>
         </div>
         <div className="sidebar-userbar-actions">
-          <div className="action">
-            <CopyIcon />
-          </div>
-          <div className="action">
+          <CopyToClipboard text={token}>
+            <div className="action" onClick={() => handleActionClick("copy")}>
+              <CopyIcon />
+            </div>
+          </CopyToClipboard>
+
+          <div className="action" onClick={() => setCreateLabelActive(true)}>
             <PencilIcon />
           </div>
-          <div className="action">
+          <div className="action" onClick={() => handleActionClick("refresh")}>
             <ReloadIcon />
           </div>
         </div>
       </div>
+
+      <CreateLabel
+        visible={createLabelActive}
+        modalRef={modalRef}
+        handleInput={(e) => setLabelInput(e.target.value)}
+        inputValue={labelInput}
+        handleAddLabelClick={handleAddLabelClick}
+        handleCancelClick={handleCancelClick}
+      />
+
       <RenderUserPanel />
       <div className="sidebar-more">
         <p className="sidebar-userPanel-h">... More</p>
-        <div className="sidebar-more-item">Data Disclaimer</div>
-        <div className="sidebar-more-item">API</div>
-        <div className="sidebar-more-item">Terms & Conditions</div>
-        <div className="sidebar-more-item">Legal notice</div>
-        <div className="sidebar-more-item">Help Center</div>
+        <a href="/" className="sidebar-more-item">Data Disclaimer</a>
+        <a href="/" className="sidebar-more-item">API</a>
+        <a href="/" className="sidebar-more-item">Terms & Conditions</a>
+        <a href="/" className="sidebar-more-item">Legal notice</a>
+        <a href="/" className="sidebar-more-item">Help Center</a>
       </div>
       <div className="sidebar-theme">
         Light/Dark Theme
@@ -128,29 +188,29 @@ const Sidebar = () => {
       </div>
       <div className="sidebar-contact">
         <div className="sidebar-contact-socials">
-          <div className="social">
+          <a href="https://telegram.org" className="social">
             <TelegramIcon />
-          </div>
-          <div className="social">
+          </a>
+          <a href="https://twitter.com" className="social">
             <TwitterIcon />
-          </div>
-          <div className="social">
+          </a>
+          <a href="https://linkedin.com" className="social">
             <LinkedinIcon />
-          </div>
-          <div className="social">
+          </a>
+          <a href="https://youtube.com" className="social">
             <YoutubeIcon />
-          </div>
-          <div className="social">
+          </a>
+          <a href="https://discord.com" className="social">
             <DiscordIcon />
-          </div>
-          <div className="social">
+          </a>
+          <a href="https://green.com" className="social">
             <GreenIcon />
-          </div>
-          <div className="social">
+          </a>
+          <a href="mailto:hello@aleno.ai" className="social">
             <MailIcon />
-          </div>
+          </a>
         </div>
-        <div className="sidebar-contact-btn">Contact Us</div>
+        <button className="sidebar-contact-btn">Contact Us</button>
       </div>
       <div className="sidebar-copyright">
         Copyright © 2022 Aleno.ai All Rights Reserved.

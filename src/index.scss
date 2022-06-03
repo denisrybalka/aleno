@@ -1,6 +1,8 @@
 @import-normalize;
 @import "./scss/common/variables";
 @import "./assets/fonts/metropolis/stylesheet.css";
+@import "./scss/common/scrollbar";
+@import "./scss/common/buttons";
 
 * {
   margin: 0;
@@ -14,6 +16,10 @@ body {
   font-family: "Metropolis";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: "Metropolis";
 }
 
 code {
