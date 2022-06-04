@@ -188,25 +188,25 @@ const Sidebar = () => {
       </div>
       <div className="sidebar-contact">
         <div className="sidebar-contact-socials">
-          <a href="https://telegram.org" className="social">
+          <a href="https://telegram.org" target="_blank" rel="noreferrer" className="social">
             <TelegramIcon />
           </a>
-          <a href="https://twitter.com" className="social">
+          <a href="https://twitter.com" target="_blank" rel="noreferrer" className="social">
             <TwitterIcon />
           </a>
-          <a href="https://linkedin.com" className="social">
+          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="social">
             <LinkedinIcon />
           </a>
-          <a href="https://youtube.com" className="social">
+          <a href="https://youtube.com" target="_blank" rel="noreferrer" className="social">
             <YoutubeIcon />
           </a>
-          <a href="https://discord.com" className="social">
+          <a href="https://discord.com" target="_blank" rel="noreferrer" className="social">
             <DiscordIcon />
           </a>
-          <a href="https://green.com" className="social">
+          <a href="https://green.com" target="_blank" rel="noreferrer" className="social">
             <GreenIcon />
           </a>
-          <a href="mailto:hello@aleno.ai" className="social">
+          <a href="mailto:hello@aleno.ai" target="_blank" rel="noreferrer" className="social">
             <MailIcon />
           </a>
         </div>

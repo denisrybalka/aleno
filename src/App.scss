@@ -1,13 +1,24 @@
 .app {
-  background-color: var(--bg-primary);
   color: var(--text-primary);
-  overflow: hidden;
-  height: 100vh;
+  background-color: var(--bg-primary);
+
   &-body {
     display: flex;
+
     .content {
       flex: 1;
+      overflow: auto;
+      max-width: calc(100% - 305px); // 305px = sidebar width
+      max-height: 100vh;
       padding: 30px;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media screen and (max-width: 1024px) {
+        max-width: 100%;
+      }
     }
   }
 }

@@ -48,6 +48,7 @@
 
         &-results.visible {
             position: absolute;
+            z-index: 100;
             top: 50px;
             opacity: 1;
             max-height: 340px;

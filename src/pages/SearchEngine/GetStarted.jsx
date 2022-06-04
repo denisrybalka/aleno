@@ -28,18 +28,18 @@ const GetStarted = () => {
           </div>
         </div>
         <div className="buttons-wrap">
-          <div className="getStarted-content-btn metamask">
+          <button className="getStarted-content-btn metamask">
             <div className="icon-wrap">
               <MetamaskIcon />
             </div>
             Metamask Connect
-          </div>
-          <div className="getStarted-content-btn wallet">
+          </button>
+          <button className="getStarted-content-btn wallet">
             <div className="icon-wrap">
               <WalletIcon />
             </div>
             Wallet Connect
-          </div>
+          </button>
         </div>
       </div>
     </div>
