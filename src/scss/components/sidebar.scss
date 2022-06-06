@@ -1,5 +1,5 @@
 .sidebar {
-  min-width: 305px;
+  max-width: 305px;
   max-height: 100vh;
   overflow: hidden auto;
   border-right: 1px solid var(--border-color);
@@ -338,6 +338,7 @@
 
   .sidebar.active {
     width: 100%;
+    max-width: 100%;
     z-index: 50;
     opacity: 1;
     pointer-events: all;
