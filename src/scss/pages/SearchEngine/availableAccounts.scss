@@ -12,9 +12,9 @@
         font-size: 16px;
         font-weight: 700;
     }
-    
+
     .table-wrap {
-        width: 100%; 
+        width: 100%;
     }
 
     &-table {
@@ -73,6 +73,20 @@
 
         }
 
+        &-th,
+        &-td {
+            .faded {
+                width: 80%;
+                height: 20%;
+                border-radius: 2px;
+                background-color: var(--border-color);
+            }
+        }
+
+        &-td:nth-child(1) {
+            padding-left: 20px;
+        }
+
         &-td {
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
@@ -105,6 +119,22 @@
                 .star.filled {
                     path {
                         fill: var(--text-active);
+                    }
+                }
+            }
+
+            .star-wrap.faded {
+                margin-left: 10px;
+                .star {
+                    path {
+                        stroke:var(--text-primary);
+                    }
+                }
+                &:hover {
+                    .star {
+                        path {
+                            fill: transparent;
+                        }
                     }
                 }
             }
@@ -247,6 +277,7 @@
             border-radius: 4px;
 
             cursor: pointer;
+
             @media screen and (max-width: 560px) {
                 width: 30px;
                 height: 30px;
@@ -255,13 +286,16 @@
 
         &-arrow {
             margin: 0px 4px;
+
             .arrow {
                 transform: rotate(90deg);
+
                 path {
                     stroke: none;
                     fill: white;
                 }
             }
+
             .arrow.right {
                 transform: rotate(270deg);
             }
@@ -275,8 +309,17 @@
             font-weight: 400;
 
             transition: 0.2s ease;
+
+            &:disabled {
+                color: var(--text-primary) !important;
+                border: 1px solid var(--border-color) !important;
+                background-color: var(--bg-primary) !important;
+                cursor: default;
+            }
         }
-        &-page.active,&-page:hover {
+
+        &-page.active,
+        &-page:hover {
             color: var(--text-active);
             border: 1px solid var(--text-active);
         }
@@ -286,8 +329,10 @@
         &-table {
             width: 1150px;
         }
+
         .table-wrap {
             overflow: auto;
+
             &::-webkit-scrollbar {
                 height: 10px;
             }

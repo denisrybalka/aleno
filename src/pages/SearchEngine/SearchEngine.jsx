@@ -11,6 +11,7 @@ const SearchEngine = () => {
       <GetStarted />
       <InvestmentStrategy faded/>
       <InvestmentStrategy/>
+      <AvailableAccounts faded/>
       <AvailableAccounts/>
     </div>
   );
