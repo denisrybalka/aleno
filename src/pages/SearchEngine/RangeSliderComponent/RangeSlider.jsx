@@ -24,7 +24,7 @@ class RangeSlider extends React.Component {
 
 	render() {
 		const { domain, values, update, inputValues } = this.state;
-		const { label, unit, range } = this.props;
+		const { label, unit, range, handleFilterDelete, id } = this.props;
 
 		return (
 			<div className="rangeSlider">
@@ -150,7 +150,7 @@ class RangeSlider extends React.Component {
 							)}
 						</Tracks>
 					</Slider>
-					<CloseIcon className="rangeSlider-close" />
+					<CloseIcon className="rangeSlider-close" onClick={() => handleFilterDelete(id)}/>
 				</div>
 			</div>
 		);

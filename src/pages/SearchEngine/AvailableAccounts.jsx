@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
+import tableSort from '../../helpers/tableSort';
 
 import { ReactComponent as StarIcon } from "../../assets/icons/star.svg";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-down.svg";
 
 import "../../scss/pages/SearchEngine/availableAccounts.scss";
-import tableSort from '../../helpers/tableSort';
 
 const tableDataCols = [
   "Address (truncated)",

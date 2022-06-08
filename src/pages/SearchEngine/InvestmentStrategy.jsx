@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { uid } from 'uid';
 import RangeSlider from './RangeSliderComponent/RangeSlider';
 
 import { ReactComponent as AdvancedIcon } from "../../assets/icons/advanced.svg";
@@ -9,6 +10,12 @@ import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-down.s
 import { useClickOutside } from '../../hooks/useClickOutside';
 
 import "../../scss/pages/SearchEngine/investmentStrategy.scss";
+
+const range = [];
+const data = [0, 5, 10, 10, 10, 15, 15, 15, 15, 20, 20, 25, 25, 30, 35, 35, 40, 40, 40, 40, 45, 45, 50, 50, 50, 55, 60, 60, 65, 65, 70, 70, 75, 80, 80, 80, 85, 90, 90, 95, 100, 105, 110, 110, 110, 115, 115, 115, 120];
+const minPrice = Math.min.apply(null, data);
+const maxPrice = Math.max.apply(null, data);
+range.push(minPrice, maxPrice + 1);
 
 const strategiesList = [
     {
@@ -64,23 +71,20 @@ const dropdownList = [
     { label: "High" },
 ]
 
-const addFiltersList = [
-    { label: "Benefit P&L" },
-    { label: "Investment use rate " },
-    { label: "Exposure token count" },
-    { label: "Swap count" },
-    { label: "Investment" },
-    { label: "Balance" },
-    { label: "Arbitrage count" },
-]
+const dropdownFilterData = {
+    label: "Asset volatility",
+    placeholder: "Choose the volatility",
+    list: dropdownList,
+}
 
-const range = [];
-const data = [0, 5, 10, 10, 10, 15, 15, 15, 15, 20, 20, 25, 25, 30, 35, 35, 40, 40, 40, 40, 45, 45, 50, 50, 50, 55, 60, 60, 65, 65, 70, 70, 75, 80, 80, 80, 85, 90, 90, 95, 100, 105, 110, 110, 110, 115, 115, 115, 120];
-const minPrice = Math.min.apply(null, data);
-const maxPrice = Math.max.apply(null, data);
-range.push(minPrice, maxPrice + 1);
+const rangeSliderData = {
+    data,
+    range,
+    label: "Volume  swapped",
+    unit: "$",
+}
 
-const DropdownFilter = ({ label, placeholder, list }) => {
+const DropdownFilter = ({ label, placeholder, list, handleFilterDelete, id }) => {
     const [dropdownActive, setDropdownActive] = useState(false);
 
     const modalRef = useClickOutside(() => {
@@ -91,7 +95,7 @@ const DropdownFilter = ({ label, placeholder, list }) => {
         <div className="dropdown-filter" ref={modalRef}>
             <div className="dropdown-filter-head">
                 <p>{label}</p>
-                <CloseIcon />
+                <CloseIcon className="close" onClick={() => handleFilterDelete(id)} />
             </div>
             <div className="dropdown-filter-select" onClick={() => setDropdownActive(!dropdownActive)}>
                 <p>{placeholder}</p>
@@ -112,9 +116,62 @@ const DropdownFilter = ({ label, placeholder, list }) => {
     )
 }
 
+const EmptyFilter = () => {
+    return (
+        <div className="strategy-advanced-filters-filter">
+            <FilterIcon />
+            <p>Click on a filter to add it</p>
+        </div>
+    )
+}
+
+const addFiltersList = [
+    { label: "Benefit P&L", Component: DropdownFilter, data: dropdownFilterData },
+    { label: "Investment use rate", Component: RangeSlider, data: rangeSliderData },
+    { label: "Exposure token count", Component: RangeSlider, data: rangeSliderData },
+    { label: "Swap count", Component: RangeSlider, data: rangeSliderData },
+    { label: "Investment", Component: DropdownFilter, data: dropdownFilterData },
+    { label: "Balance", Component: DropdownFilter, data: dropdownFilterData },
+    { label: "Arbitrage count", Component: DropdownFilter, data: dropdownFilterData },
+]
+
 const InvestmentStrategy = ({ faded }) => {
     const [advancedActive, setAdvancedActive] = useState(false);
     const [strategyActiveId, setStrategyActiveId] = useState(null);
+    const [activeFilters, setActiveFilters] = useState([]);
+
+    React.useEffect(() => {
+        const emptyFilters = new Array(6).fill(0).map((el) => {
+            return {
+                Component: EmptyFilter,
+                data: [],
+                id: uid(),
+            }
+        })
+
+        setActiveFilters(emptyFilters)
+    }, []) // on component load fill area with empty filters
+
+    const handleFilterAdd = (filter) => {
+        const id = uid(), newFilter = {...filter, id};
+        let newArray;
+        let index = activeFilters.findIndex((a) => a.Component === EmptyFilter); // find where to place item
+        if (index > -1) {
+            newArray = [...activeFilters.slice(0, index), newFilter, ...activeFilters.slice(index, -1)];
+        } else {
+            newArray = [...activeFilters, newFilter];
+        }
+        setActiveFilters((state) => [...newArray]);
+    }
+
+    const handleFilterDelete = (id) => {
+        const curIdx = activeFilters.findIndex((a) => a.id === id);
+        let newArray = [...activeFilters.slice(0,curIdx), ...activeFilters.slice(curIdx+1)];
+        while (newArray.length < 6) {
+            newArray = newArray.concat({ Component: EmptyFilter, data: [], id: uid() });
+        }
+        setActiveFilters((state) => [...newArray]);
+    }
 
     return (
         <div className="strategy">
@@ -165,11 +222,14 @@ const InvestmentStrategy = ({ faded }) => {
                     <p>Add a filter</p>
                     <div className="strategy-advanced-add-list">
                         {
-                            addFiltersList.concat(addFiltersList).concat(addFiltersList).map(({ label }, id) => {
+                            addFiltersList.map(({ label, Component, data }, id) => {
                                 return (
                                     <div className="strategy-advanced-add-list-item" key={id}>
                                         <p>{label}</p>
-                                        <PlusIcon className={`plus ${faded ? "faded" : ""}`} />
+                                        <PlusIcon
+                                            className={`plus ${faded ? "faded" : ""}`}
+                                            onClick={() => handleFilterAdd({ Component, data })}
+                                        />
                                     </div>
                                 )
                             })
@@ -178,26 +238,11 @@ const InvestmentStrategy = ({ faded }) => {
                 </div>
                 <div className="strategy-advanced-filters">
                     {
-                        faded ?
-                            new Array(6).fill(0).map(() => {
-                                return (
-                                    <div className="strategy-advanced-filters-filter">
-                                        <FilterIcon />
-                                        <p>Click on a filter to add it</p>
-                                    </div>
-                                )
-                            }) :
-                            <>
-                                <DropdownFilter label="Asset volatility" placeholder="Choose the volatility" list={dropdownList} />
-                                <RangeSlider data={data} range={range} label="Volume  swapped" unit="$" />
-                                <RangeSlider data={data} range={range} label="ROI" unit="%" />
-                                <DropdownFilter label="Asset volatility" placeholder="Choose the volatility" list={dropdownList} />
-                                <DropdownFilter label="Asset volatility" placeholder="Choose the volatility" list={dropdownList} />
-                                <div className="strategy-advanced-filters-filter">
-                                    <FilterIcon />
-                                    <p>Click on a filter to add it</p>
-                                </div>
-                            </>
+                        activeFilters.map(({ Component, data, id }) => {
+                            return (
+                                <Component {...data} handleFilterDelete={handleFilterDelete} id={id} key={id}/>
+                            )
+                        })
                     }
                 </div>
             </div>

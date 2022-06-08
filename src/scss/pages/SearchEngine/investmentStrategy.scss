@@ -280,10 +280,13 @@
         }
 
         &-filters {
+            position: relative;
             display: flex;
             flex-wrap: wrap;
             height: 100%;
-            gap: 9px 1%;
+            max-height: 100%;
+            overflow: hidden auto;
+            gap: 8px 1%;
             flex: 1;
             padding: 10px;
             border-radius: 4px;
@@ -330,6 +333,10 @@
                         font-style: normal;
                         letter-spacing: 0.06px;
                     }
+
+                    .close {
+                        cursor: pointer;
+                    }
                 }
 
                 &-select {
@@ -372,7 +379,7 @@
                     right: 9px;
                     width: auto;
                     position: absolute;
-                    z-index: 20;
+                    z-index: 500;
                     pointer-events: none;
                     padding: 9px;
                     border-radius: 4px;
