@@ -173,6 +173,16 @@
 	padding: 10px;
 	align-self: flex-end;
 
+	@media screen and (min-width:2000px) {
+		margin-left: auto;
+		width:50%;
+	}
+
+	@media screen and (min-width:2400px) {
+		margin-left: auto;
+		width:40%;
+	}
+
 	@media screen and (max-width:1360px) {
 		display: none;
 	}

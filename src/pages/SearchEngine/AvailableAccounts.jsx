@@ -158,11 +158,15 @@ const RenderTableRow = ({ data, faded }) => {
       if (faded) {
         return (
           <tr key={id}>
-            <th scope="row" className="availableAccounts-table-td"><div className="faded"></div></th>
+            <th scope="row" className="availableAccounts-table-td">
+              <div className="faded"></div>
+            </th>
             {
-              new Array(rowsLength).fill(0).map((el) => {
+              new Array(rowsLength).fill(0).map((el, i) => {
                 return (
-                  <td className="availableAccounts-table-td"><div className="faded"></div></td>
+                  <td className="availableAccounts-table-td" key={i}>
+                    <div className="faded"></div>
+                  </td>
                 )
               })
             }
@@ -180,9 +184,9 @@ const RenderTableRow = ({ data, faded }) => {
           <th scope="row" className="availableAccounts-table-td address"><a href="/">{address}</a></th>
           <td className="availableAccounts-table-td label">
             <div className={`label-wrap ${labels.length > 3 ? "hidden" : ""}`}>
-              {labels.map((label) => {
+              {labels.map((label, i) => {
                 return (
-                  <img src={label} className="img" alt="strategy" />
+                  <img src={label} className="img" alt="strategy" key={i} />
                 )
               })}
               <div className="arrow-wrap">
@@ -222,7 +226,7 @@ const AvailableAccounts = ({ faded }) => {
         const sorted = [...tableSort([...tableDataRows], colId, direction)];
         setSortedTableData(sorted);
         console.log(sorted);
-        
+
         setSortDirection(direction);
         setPrevColId(colId);
       }
@@ -246,7 +250,7 @@ const AvailableAccounts = ({ faded }) => {
                         </p>
                         <div className="arrows">
                           <ArrowIcon className="arrow top" onClick={() => handleFilterClick(id, 1)} />
-                          <ArrowIcon className="arrow " onClick={() => handleFilterClick(id, 0)}/>
+                          <ArrowIcon className="arrow " onClick={() => handleFilterClick(id, 0)} />
                         </div>
                       </div>
                     </th>

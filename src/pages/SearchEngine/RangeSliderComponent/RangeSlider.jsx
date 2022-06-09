@@ -150,8 +150,8 @@ class RangeSlider extends React.Component {
 							)}
 						</Tracks>
 					</Slider>
-					<CloseIcon className="rangeSlider-close" onClick={() => handleFilterDelete(id)}/>
 				</div>
+					<CloseIcon className="rangeSlider-close" onClick={() => handleFilterDelete(id)}/>
 			</div>
 		);
 	}
